@@ -1,0 +1,1 @@
+﻿$ports = Get-NetTCPConnection  | Select-Object LocalPort |Select-String -Pattern "50[0-1][0-2]|812[5,6]|6[0-1]62" -AllMatches | % { $_.Matches } | % { $_.Value } | Get-Unique ; if ($ports){ Write-Host "portas sendo usadas": $ports}
