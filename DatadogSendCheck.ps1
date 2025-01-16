@@ -1,4 +1,4 @@
-$values = get-service -name "xb*" | select-object name, status
+$values = Get-clusterResource -Name "<nodes-names>" | select-Object name,state
 
 function dogstatsd($serviceCheck) {
     $udpClient = New-Object System.Net.Sockets.UdpClient
@@ -10,17 +10,9 @@ function dogstatsd($serviceCheck) {
 
 foreach ($value in $values) {
     $servico=$value.name
-    $status=$value.Status
-    if ($status -eq "running"){$status=0}else{$status=2}
+    $status=$value.state
+    if ($status -eq "Online"){$status=0}else{$status=2}
     $serviceCheck = "_sc|$servico|$status"
     dogstatsd($serviceCheck)
-    $serviceCheck
+    write-host "Payload sent: " $serviceCheck
 }
-
-
-
-
-
-
-
-
